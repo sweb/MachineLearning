@@ -27,13 +27,17 @@ case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
   def mult(otherMatrix: MLEsotericMatrix): MLMatrix = {
     MLMatrix(data.mult(otherMatrix.data))
   }
+
+  def minus(otherMatrix: MLEsotericMatrix): MLMatrix = {
+    MLMatrix(data.minus(otherMatrix.data))
+  }
 }
 
 object MLMatrix {
   def apply(rawData: Array[Array[Double]]) = new MLMatrix(rawData)
 }
 
-case class MLVector(data: SimpleMatrix) {
+case class MLVector(data: SimpleMatrix) extends MLEsotericMatrix {
   
   def this(rawData: Array[Double]) = {
     this(new SimpleMatrix(Array(rawData)).transpose())
@@ -51,6 +55,10 @@ case class MLVector(data: SimpleMatrix) {
     MLVector(data.mult(otherMatrix.data))
   }
 
+  def minus(otherMatrix: MLEsotericMatrix): MLVector = {
+    MLVector(data.minus(otherMatrix.data))
+  }
+
 }
 
 object MLVector {
@@ -65,4 +73,6 @@ trait MLEsotericMatrix {
   def transpose(): MLEsotericMatrix
 
   def mult(otherMatrix: MLEsotericMatrix): MLEsotericMatrix
+
+  def minus(otherMatrix: MLEsotericMatrix): MLEsotericMatrix
 }
