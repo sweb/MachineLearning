@@ -32,7 +32,7 @@ class MLMatrixSpec extends FlatSpec with Matchers {
   it should "multiply" in {
     val data = Array(Array(2.0, 5.0), Array(1.0, 3.0))
     val baseMatrix = MLMatrix(data)
-    val matrix = baseMatrix.mult(baseMatrix.invert())
+    val matrix = baseMatrix * baseMatrix.invert()
 
     matrix(0,0) should be (1.0 +- 0.000001)
     matrix(0,1) should be (0.0 +- 0.000001)

@@ -12,14 +12,12 @@ case class LeastSquares(featureMatrix: Array[Array[Double]], observations: Array
 
   def solve(): Array[Double] = {
     // X has to have full column rank - how to check?
-    require(X.data.getMatrix.getNumRows == y.data.getMatrix.getNumRows,
+    require(X.numberOfRows == y.numberOfItems,
       "Number of feature rows does not equal number of observations")
 
-    val T = X.transpose()
-
-    val beta = ( T.mult(X) ).invert().mult(T).mult(y)
-
-    beta.data.getMatrix().getData()
+    val T = X.transpose
+    val beta = ( T * X ).invert()* T * y
+    beta.getData()
   }
 
   def addInterceptColumn(featureMatrix: Array[Array[Double]]): Array[Array[Double]] = {
@@ -32,16 +30,16 @@ case class LeastSquares(featureMatrix: Array[Array[Double]], observations: Array
 
   def residualSumOfSquares(parameters: Array[Double]): Double = {
     val beta = MLVector(parameters)
-    val rss = (y.minus( (X.mult(beta)) )).transpose().mult( (y.minus(X.mult(beta))) )
-    rss.data.getMatrix.getData()(0)
+    val rss = (y - (X * beta) ).transpose * (y -(X * beta))
+    rss(0)
   }
 
   def predict(featureMatrix: Array[Array[Double]]): Array[Double] = {
     val processedFeatures = preprocessFeatures(featureMatrix)
     val X = MLMatrix(processedFeatures)
     val beta = MLVector(fittedParameters)
-    val prediction = X.mult(beta)
-    prediction.data.getMatrix.getData
+    val prediction = X * beta
+    prediction.getData
   }
 
 }

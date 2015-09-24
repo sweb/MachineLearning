@@ -24,6 +24,8 @@ case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
     MLMatrix(data.invert())
   }
 
+  override def *(otherMatrix: MLEsotericMatrix): MLMatrix = this.mult(otherMatrix)
+
   def mult(otherMatrix: MLEsotericMatrix): MLMatrix = {
     MLMatrix(data.mult(otherMatrix.data))
   }
@@ -31,6 +33,9 @@ case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
   def minus(otherMatrix: MLEsotericMatrix): MLMatrix = {
     MLMatrix(data.minus(otherMatrix.data))
   }
+
+  def numberOfRows = data.getMatrix.getNumRows
+  def numberOfCols = data.getMatrix.getNumCols
 }
 
 object MLMatrix {
@@ -55,9 +60,17 @@ case class MLVector(data: SimpleMatrix) extends MLEsotericMatrix {
     MLVector(data.mult(otherMatrix.data))
   }
 
+  override def *(otherMatrix: MLEsotericMatrix): MLVector = this.mult(otherMatrix)
+
+  override def -(otherMatrix: MLEsotericMatrix): MLVector = {
+    this.minus(otherMatrix)
+  }
+
   def minus(otherMatrix: MLEsotericMatrix): MLVector = {
     MLVector(data.minus(otherMatrix.data))
   }
+
+  def numberOfItems = data.getMatrix.getNumElements
 
 }
 
@@ -72,7 +85,13 @@ trait MLEsotericMatrix {
 
   def transpose(): MLEsotericMatrix
 
+  def *(otherMatrix: MLEsotericMatrix): MLEsotericMatrix = this.mult(otherMatrix)
+
   def mult(otherMatrix: MLEsotericMatrix): MLEsotericMatrix
 
+  def -(otherMatrix: MLEsotericMatrix): MLEsotericMatrix = this.minus(otherMatrix)
+
   def minus(otherMatrix: MLEsotericMatrix): MLEsotericMatrix
+
+  def getData(): Array[Double] = data.getMatrix.getData
 }
