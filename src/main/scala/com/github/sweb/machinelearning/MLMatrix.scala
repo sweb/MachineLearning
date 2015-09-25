@@ -6,7 +6,7 @@ import org.ejml.simple.SimpleMatrix
  * Created by Florian on 23.09.2015.
  * Notes: Array of rows
  */
-case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
+case class MLMatrix(data: SimpleMatrix) {
 
   def this(rawData: Array[Array[Double]]) = {
     this(new SimpleMatrix(rawData))
@@ -24,13 +24,15 @@ case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
     MLMatrix(data.invert())
   }
 
-  override def *(otherMatrix: MLEsotericMatrix): MLMatrix = this.mult(otherMatrix)
-
-  def mult(otherMatrix: MLEsotericMatrix): MLMatrix = {
+  def *(otherMatrix: MLMatrix): MLMatrix = {
     MLMatrix(data.mult(otherMatrix.data))
   }
 
-  def minus(otherMatrix: MLEsotericMatrix): MLMatrix = {
+  def *(otherMatrix: MLVector): MLVector = {
+    MLVector(data.mult(otherMatrix.data))
+  }
+
+  def -(otherMatrix: MLMatrix): MLMatrix = {
     MLMatrix(data.minus(otherMatrix.data))
   }
 
@@ -42,7 +44,7 @@ object MLMatrix {
   def apply(rawData: Array[Array[Double]]) = new MLMatrix(rawData)
 }
 
-case class MLVector(data: SimpleMatrix) extends MLEsotericMatrix {
+case class MLVector(data: SimpleMatrix) {
   
   def this(rawData: Array[Double]) = {
     this(new SimpleMatrix(Array(rawData)).transpose())
@@ -56,42 +58,24 @@ case class MLVector(data: SimpleMatrix) extends MLEsotericMatrix {
     MLVector(data.transpose())
   }
 
-  def mult(otherMatrix: MLEsotericMatrix): MLVector = {
+  def *(otherMatrix: MLVector): MLVector = {
     MLVector(data.mult(otherMatrix.data))
   }
 
-  override def *(otherMatrix: MLEsotericMatrix): MLVector = this.mult(otherMatrix)
-
-  override def -(otherMatrix: MLEsotericMatrix): MLVector = {
-    this.minus(otherMatrix)
+  def *(otherMatrix: MLMatrix): MLVector = {
+    MLVector(data.mult(otherMatrix.data))
   }
 
-  def minus(otherMatrix: MLEsotericMatrix): MLVector = {
+  def -(otherMatrix: MLVector): MLVector = {
     MLVector(data.minus(otherMatrix.data))
   }
 
   def numberOfItems = data.getMatrix.getNumElements
 
+  def getData(): Array[Double] = data.getMatrix.getData
+
 }
 
 object MLVector {
   def apply(rawData: Array[Double]) = new MLVector(rawData)
-}
-
-
-trait MLEsotericMatrix {
-
-  def data(): SimpleMatrix
-
-  def transpose(): MLEsotericMatrix
-
-  def *(otherMatrix: MLEsotericMatrix): MLEsotericMatrix = this.mult(otherMatrix)
-
-  def mult(otherMatrix: MLEsotericMatrix): MLEsotericMatrix
-
-  def -(otherMatrix: MLEsotericMatrix): MLEsotericMatrix = this.minus(otherMatrix)
-
-  def minus(otherMatrix: MLEsotericMatrix): MLEsotericMatrix
-
-  def getData(): Array[Double] = data.getMatrix.getData
 }
