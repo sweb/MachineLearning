@@ -6,7 +6,15 @@ import org.ejml.simple.SimpleMatrix
  * Created by Florian on 23.09.2015.
  * Notes: Array of rows
  */
-case class MLMatrix(data: SimpleMatrix) {
+trait MLEsotericMatrix {
+  def data: SimpleMatrix
+
+  protected def internalMult(implicit that: MLEsotericMatrix): SimpleMatrix = {
+    data.mult(that.data)
+  }
+}
+
+case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
 
   def this(rawData: Array[Array[Double]]) = this(new SimpleMatrix(rawData))
 
@@ -16,9 +24,9 @@ case class MLMatrix(data: SimpleMatrix) {
 
   def invert(): MLMatrix = MLMatrix(data.invert())
 
-  def *(that: MLMatrix): MLMatrix = MLMatrix(data.mult(that.data))
+  def *(implicit that: MLMatrix): MLMatrix = MLMatrix(internalMult)
 
-  def *(that: MLVector): MLVector = MLVector(data.mult(that.data))
+  def *(implicit that: MLVector): MLVector = MLVector(internalMult)
 
   def -(that: MLMatrix): MLMatrix = MLMatrix(data.minus(that.data))
 
@@ -30,7 +38,7 @@ object MLMatrix {
   def apply(rawData: Array[Array[Double]]) = new MLMatrix(rawData)
 }
 
-case class MLVector(data: SimpleMatrix) {
+case class MLVector(data: SimpleMatrix) extends MLEsotericMatrix {
   
   def this(rawData: Array[Double]) = {
     this(new SimpleMatrix(Array(rawData)).transpose())
@@ -40,9 +48,9 @@ case class MLVector(data: SimpleMatrix) {
 
   def transpose(): MLVector = MLVector(data.transpose())
 
-  def *(that: MLVector): MLVector = MLVector(data.mult(that.data))
+  def *(implicit that: MLVector): MLVector = MLVector(internalMult)
 
-  def *(that: MLMatrix): MLVector = MLVector(data.mult(that.data))
+  def *(implicit that: MLMatrix): MLVector = MLVector(internalMult)
 
   def -(that: MLVector): MLVector = MLVector(data.minus(that.data))
 
