@@ -12,6 +12,8 @@ trait MLEsotericMatrix {
   protected def internalMult(implicit that: MLEsotericMatrix): SimpleMatrix = {
     data.mult(that.data)
   }
+
+  def *(implicit that: MLVector): MLVector = MLVector(internalMult)
 }
 
 case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
@@ -25,8 +27,6 @@ case class MLMatrix(data: SimpleMatrix) extends MLEsotericMatrix {
   def invert(): MLMatrix = MLMatrix(data.invert())
 
   def *(implicit that: MLMatrix): MLMatrix = MLMatrix(internalMult)
-
-  def *(implicit that: MLVector): MLVector = MLVector(internalMult)
 
   def -(that: MLMatrix): MLMatrix = MLMatrix(data.minus(that.data))
 
@@ -47,8 +47,6 @@ case class MLVector(data: SimpleMatrix) extends MLEsotericMatrix {
   def apply(index: Int): Double = data.get(index)
 
   def transpose(): MLVector = MLVector(data.transpose())
-
-  def *(implicit that: MLVector): MLVector = MLVector(internalMult)
 
   def *(implicit that: MLMatrix): MLVector = MLVector(internalMult)
 
