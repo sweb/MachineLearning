@@ -1,5 +1,7 @@
 package com.github.sweb.machinelearning
 
+import com.github.sweb.machinelearning.utils.DataFrame
+
 import scala.util.Try
 
 /**
@@ -11,21 +13,9 @@ object ExampleDataUtil extends App {
 
   println(data.header.mkString(","))
   println("-" * 80)
-  println(data.body.map(x => x.mkString(",")).mkString("\n"))
+  println(data.body.map(x => x.mkString("", ",", "")).mkString("\n"))
 
 }
 
-case class DataFrame(header: Array[String], body: List[Array[Any]])
 
-object DataFrame {
-  def readFromCsv(filename: String): DataFrame = {
-    val source = scala.io.Source.fromFile(filename)
-    val lines = try source.getLines.toList finally source.close
 
-    val header = lines.head.split(',').map(_.trim)
-
-    val rows = lines.tail.map(row => row.split(',').map(_.trim).map(x => Try(x.toDouble).getOrElse(x)))
-
-    DataFrame(header, rows)
-  }
-}
