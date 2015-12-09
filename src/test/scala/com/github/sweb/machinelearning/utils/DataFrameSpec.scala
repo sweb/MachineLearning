@@ -16,4 +16,11 @@ class DataFrameSpec extends FlatSpec with Matchers {
     data.body.size should be (97)
   }
 
+  it should "transform imported data to array of array format as used by ML algorithms" in {
+    val result: Array[Array[Any]] = Array(Array(0.5, 1.0), Array(1.0, 0.0))
+    val testDf = DataFrame(Array("var1", "var2"), result.toList)
+
+    testDf.toFeatureMatrix(Nil) should be (result)
+  }
+
 }

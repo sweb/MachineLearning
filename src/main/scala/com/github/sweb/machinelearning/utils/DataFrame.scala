@@ -18,7 +18,8 @@ object DataFrame {
   }
 }
 case class DataFrame(header: Array[String], body: List[Array[Any]]) {
+
   def toFeatureMatrix(columns: List[Int]): Array[Array[Double]] = {
-    ???
+    body.map(row => row.filter(_.isInstanceOf[Double]).map(_.asInstanceOf[Double])).toArray
   }
 }
