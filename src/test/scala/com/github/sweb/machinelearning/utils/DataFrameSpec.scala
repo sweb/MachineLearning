@@ -23,4 +23,15 @@ class DataFrameSpec extends FlatSpec with Matchers {
     testDf.toFeatureMatrix(Nil) should be (result)
   }
 
+  it should "ignore string-columns" in {
+    val body = List(Array(0.5, "word", 1.0), Array(1.0, "anotherWord", 0.0))
+
+    val testDf = DataFrame(Array("var1", "var2"), body)
+
+    val result: Array[Array[Any]] = Array(Array(0.5, 1.0), Array(1.0, 0.0))
+
+    testDf.toFeatureMatrix(Nil) should be (result)
+
+  }
+
 }
