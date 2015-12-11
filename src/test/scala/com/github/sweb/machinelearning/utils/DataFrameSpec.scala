@@ -20,7 +20,7 @@ class DataFrameSpec extends FlatSpec with Matchers {
     val result: Array[Array[Any]] = Array(Array(0.5, 1.0), Array(1.0, 0.0))
     val testDf = DataFrame(Array("var1", "var2"), result.toList)
 
-    testDf.toFeatureMatrix(Nil) should be (result)
+    testDf.toFeatureMatrix should be (result)
   }
 
   it should "ignore string-columns" in {
@@ -30,7 +30,15 @@ class DataFrameSpec extends FlatSpec with Matchers {
 
     val result: Array[Array[Any]] = Array(Array(0.5, 1.0), Array(1.0, 0.0))
 
-    testDf.toFeatureMatrix(Nil) should be (result)
+    testDf.toFeatureMatrix should be (result)
+
+  }
+
+  it should "filter rows" in {
+    val body = List(Array(0.5, 1.0, "T"), Array(1.0, 0.0, "F"), Array(-0.5, 0.5, "T"))
+    val testDf = DataFrame(Array("var1", "var2", "indic"), body)
+
+    testDf.filter(2, x => x == "T").body.map(_.toList) should equal (List(List(0.5, 1.0, "T"), List(-0.5, 0.5, "T")))
 
   }
 
