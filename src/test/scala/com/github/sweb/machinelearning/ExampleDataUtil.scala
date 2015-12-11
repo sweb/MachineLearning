@@ -9,14 +9,11 @@ object ExampleDataUtil extends App {
 
   val data = DataFrame.readFromCsv("src/test/resources/data.csv")
 
-  println(data.header.mkString(","))
-  println("-" * 80)
-  println(data.body.map(x => x.mkString("", ",", "")).mkString("\n"))
+  val train = data.filter(9, "T").toFeatureMatrix
 
-  println("-" * 80)
-  println("-" * 80)
+  train.foreach(row => println(row.mkString(",")))
 
-  data.toFeatureMatrix.foreach(row => println(row.mkString(",")))
+
 
 }
 

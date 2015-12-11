@@ -15,6 +15,12 @@ case class DataFrame(header: Array[String], body: List[Array[Any]]) {
     val filteredBody = body.filter(row => row(column) == criterium)
     DataFrame(header, filteredBody)
   }
+
+  def select(columns: List[Int]): DataFrame = {
+    val selectedHeader = columns.map(header(_)).toArray
+    val selectedBody = body.map(row => columns.map(row(_)).toArray)
+    DataFrame(selectedHeader, selectedBody)
+  }
 }
 
 object DataFrame {
