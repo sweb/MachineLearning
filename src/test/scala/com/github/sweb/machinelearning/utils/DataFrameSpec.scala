@@ -38,7 +38,7 @@ class DataFrameSpec extends FlatSpec with Matchers {
     val body = List(Array(0.5, 1.0, "T"), Array(1.0, 0.0, "F"), Array(-0.5, 0.5, "T"))
     val testDf = DataFrame(Array("var1", "var2", "indic"), body)
 
-    testDf.filter(2, x => x == "T").body.map(_.toList) should equal (List(List(0.5, 1.0, "T"), List(-0.5, 0.5, "T")))
+    testDf.filter(2, "T").body.map(_.toList) should equal (List(List(0.5, 1.0, "T"), List(-0.5, 0.5, "T")))
 
   }
 
