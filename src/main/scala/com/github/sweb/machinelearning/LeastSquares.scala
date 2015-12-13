@@ -42,6 +42,13 @@ case class LeastSquares(featureMatrix: Array[Array[Double]], observations: Array
     prediction.getData
   }
 
+  def variance(): Double = {
+    residualSumOfSquares(fittedParameters) / (X.numberOfRows - X.numberOfCols - 1 - 1)
+  }
+
+  def covarianceMatrix(): MLMatrix = {
+    (X.transpose * X).invert * variance
+  }
 }
 
 object LeastSquares {
