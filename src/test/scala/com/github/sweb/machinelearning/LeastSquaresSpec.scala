@@ -79,22 +79,22 @@ class LeastSquaresSpec extends FlatSpec with Matchers {
   }
 
   it should "standardize predictors to have unit variance" in {
-    val results = LeastSquares.standardize(data).flatten
-    results(0) should equal (-1.581 +- 0.0001)
-    results(1) should equal (-1.318 +- 0.0001)
-    results(2) should equal (-1.438 +- 0.0001)
-    results(3) should equal (-0.881 +- 0.0001)
-    results(4) should equal (-0.706 +- 0.0001)
-    results(5) should equal (-0.443 +- 0.0001)
-    results(6) should equal (-0.18 +- 0.0001)
-    results(7) should equal (-0.005 +- 0.0001)
-    results(8) should equal (0.256 +- 0.0001)
-    results(9) should equal (0.431 +- 0.0001)
-    results(10) should equal (0.694 +- 0.0001)
-    results(11) should equal (0.869 +- 0.0001)
-    results(12) should equal (1.132 +- 0.0001)
-    results(13) should equal (1.307 +- 0.0001)
-    results(14) should equal (1.569 +- 0.0001)
+    val results = LeastSquares.standardize(MLMatrix(data)).data.getMatrix.getData
+    results(0) should equal (-1.581 +- 0.001)
+    results(1) should equal (-1.318 +- 0.001)
+    results(2) should equal (-1.143 +- 0.001)
+    results(3) should equal (-0.881 +- 0.001)
+    results(4) should equal (-0.706 +- 0.001)
+    results(5) should equal (-0.443 +- 0.001)
+    results(6) should equal (-0.18 +- 0.001)
+    results(7) should equal (-0.005 +- 0.001)
+    results(8) should equal (0.256 +- 0.001)
+    results(9) should equal (0.431 +- 0.001)
+    results(10) should equal (0.694 +- 0.001)
+    results(11) should equal (0.869 +- 0.001)
+    results(12) should equal (1.132 +- 0.001)
+    results(13) should equal (1.307 +- 0.001)
+    results(14) should equal (1.569 +- 0.001)
   }
 
 }

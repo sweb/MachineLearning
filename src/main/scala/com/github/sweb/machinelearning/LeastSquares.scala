@@ -53,10 +53,15 @@ case class LeastSquares(featureMatrix: Array[Array[Double]], observations: Array
 
 object LeastSquares {
   def standardize(featureMatrix: MLMatrix): MLMatrix = {
-    val columns = (0 to featureMatrix.numberOfCols).map(featureMatrix.data.extractVector(false, _).getMatrix.getData).toList
+    val columns = (0 until featureMatrix.numberOfCols).map(featureMatrix.data.extractVector(false, _).getMatrix.getData).toList
     val sizes = columns.map(_.size)
     val means = columns.map(col => col.sum / col.size)
+    println(means)
+    val standardDeviations = columns.zip(means).map(tuple => Math.sqrt(tuple._1.map(v => Math.pow(v - tuple._2, 2)).sum / (tuple._1.size - 1)))
+    println(standardDeviations)
+    val reducedByMean = columns.zip(means).map(tuple => tuple._1.map(_ - tuple._2))
+    val standardized = reducedByMean.zip(standardDeviations).map(tuple => tuple._1.map(_ / tuple._2))
     // Here we need some stuff with mean and standard deviation
-    ???
+    MLMatrix(standardized.toArray)
   }
 }
