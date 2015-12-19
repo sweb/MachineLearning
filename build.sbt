@@ -11,3 +11,4 @@ libraryDependencies += "org.scalatest" % "scalatest_2.10" % "3.0.0-M7" % "test"
 libraryDependencies += "org.ejml" % "all" % "0.28"
 
 
+

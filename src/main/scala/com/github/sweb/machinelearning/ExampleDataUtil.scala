@@ -18,6 +18,7 @@ object ExampleDataUtil extends App {
 
   val result = model.fittedParameters
 
+  println("-" * 80)
   println(result.mkString(","))
 
 

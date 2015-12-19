@@ -98,7 +98,7 @@ class LeastSquaresSpec extends FlatSpec with Matchers {
     results(14) should equal(1.569 +- 0.001)
   }
 
-  it should "standardize multiple predictors to have unit variance" in {
+  it should "standardize zero variance and normal predictors to have unit variance" in {
     val data = Array(Array(1.0, 1.47),
       Array(1.0, 1.50),
       Array(1.0, 1.52),
@@ -143,6 +143,36 @@ class LeastSquaresSpec extends FlatSpec with Matchers {
       }
     })
 
+    results.length should be (30)
+
   }
+
+  it should "standardize multiple normal predictors to have unit variance" in {
+    val data = Array(Array(1.0, 3.0),
+      Array(2.0, 5.0),
+      Array(3.0, 20.0),
+      Array(4.0, 3.5),
+      Array(5.0, 15.0),
+      Array(6.0, 8.0)
+    )
+
+    val expected = Array(Array(-1.33, -0.87),
+    Array(-0.80, -0.58),
+    Array(-0.26, 1.57),
+    Array(0.26, -0.80),
+    Array(0.80, 0.85),
+    Array(1.33, -0.15))
+
+    val results = LeastSquares.standardize(MLMatrix(data)).data.getMatrix.getData
+
+    results.zip(expected.flatten.toList).map(x => {
+      x match {
+        case (y, z) => y should equal (z +- 0.01)
+      }
+    })
+
+   data.length should be (expected.length)
+  }
+
 
 }

@@ -5,7 +5,8 @@ package com.github.sweb.machinelearning
   */
 case class LeastSquares(featureMatrix: Array[Array[Double]], observations: Array[Double], addIntercept: Boolean) {
   val processedFeatures = preprocessFeatures(featureMatrix)
-  val X = LeastSquares.standardize(MLMatrix(processedFeatures))
+  //val X = LeastSquares.standardize(MLMatrix(processedFeatures))
+  val X = MLMatrix(processedFeatures)
   val y = MLVector(observations)
 
   lazy val fittedParameters = solve()
