@@ -9,9 +9,13 @@ object ExampleDataUtil extends App {
 
   val data = DataFrame.readFromCsv("src/test/resources/data.csv")
 
+  val prepRelevData = data.select((0 to 7).toList).toFeatureMatrix
+
+  val (_, means, stds) = Preprocessor.standardize(MLMatrix(prepRelevData))
+
   val train = data.filter(9, "T")
 
-  val trainFeatures = train.select((0 to 7).toList).toFeatureMatrix
+  val trainFeatures = Preprocessor.standardize(MLMatrix(train.select((0 to 7).toList).toFeatureMatrix), means, stds)._1.to2DArray
   val trainObservations = train.select(List(8)).toFeatureMatrix.flatten
 
   val model = LeastSquares(trainFeatures, trainObservations, true)

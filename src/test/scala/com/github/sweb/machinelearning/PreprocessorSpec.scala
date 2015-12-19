@@ -24,7 +24,7 @@ class PreprocessorSpec extends FlatSpec with Matchers {
     Array(1.83))
 
   it should "standardize predictors to have unit variance" in {
-    val results = Preprocessor.standardize(MLMatrix(data)).data.getMatrix.getData
+    val results = Preprocessor.standardize(MLMatrix(data))._1.data.getMatrix.getData
     results(0) should equal(-1.581 +- 0.001)
     results(1) should equal(-1.318 +- 0.001)
     results(2) should equal(-1.143 +- 0.001)
@@ -59,7 +59,7 @@ class PreprocessorSpec extends FlatSpec with Matchers {
       Array(1.0, 1.80),
       Array(1.0, 1.83))
 
-    val results = Preprocessor.standardize(MLMatrix(data)).data.getMatrix.getData
+    val results = Preprocessor.standardize(MLMatrix(data))._1.data.getMatrix.getData
 
     val expected = Array(
       Array(1.0, -1.581),
@@ -104,7 +104,7 @@ class PreprocessorSpec extends FlatSpec with Matchers {
       Array(0.80, 0.85),
       Array(1.33, -0.15))
 
-    val results = Preprocessor.standardize(MLMatrix(data)).data.getMatrix.getData
+    val results = Preprocessor.standardize(MLMatrix(data))._1.data.getMatrix.getData
 
     results.zip(expected.flatten.toList).map(x => {
       x match {

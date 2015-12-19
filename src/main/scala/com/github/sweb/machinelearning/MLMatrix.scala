@@ -40,6 +40,15 @@ case class MLMatrix(data: SimpleMatrix) extends MLMatrixLike {
     val column: Array[Double] = data.extractVector(false, colId).getMatrix.getData
     column.map(f)
   }
+
+  def to2DArray: Array[Array[Double]] = {
+    val nrows = numberOfRows
+    val ncols = numberOfCols
+
+    val rowIds = 0 until nrows
+    val colIds = 0 until ncols
+    rowIds.map(rowId => colIds.map(colId => data.get(rowId * ncols + colId)).toArray).toArray
+  }
 }
 
 object MLMatrix {

@@ -45,4 +45,8 @@ class MLMatrixSpec extends FlatSpec with Matchers {
     matrix.applyToColumn(0, x => x * 2).toList should be (List(0.0, 10.0))
     matrix.applyToColumn(1, x => x + 1.0).toList should be (List(2.0, 3.0))
   }
+
+  it should "convert back to an Array" in {
+    (matrix.to2DArray.toList.map(_.toList)) should be (data.toList.map(_.toList))
+  }
 }
