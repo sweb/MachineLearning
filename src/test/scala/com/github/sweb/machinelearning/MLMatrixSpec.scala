@@ -40,4 +40,9 @@ class MLMatrixSpec extends FlatSpec with Matchers {
     matrix(1,0) should be (0.0 +- 0.000001)
     matrix(1,1) should be (1.0 +- 0.000001)
   }
+
+  it should "apply a function to a column" in {
+    matrix.applyToColumn(0, x => x * 2).toList should be (List(0.0, 10.0))
+    matrix.applyToColumn(1, x => x + 1.0).toList should be (List(2.0, 3.0))
+  }
 }

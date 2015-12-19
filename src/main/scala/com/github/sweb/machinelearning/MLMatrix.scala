@@ -34,6 +34,12 @@ case class MLMatrix(data: SimpleMatrix) extends MLMatrixLike {
 
   def numberOfRows = data.getMatrix.getNumRows
   def numberOfCols = data.getMatrix.getNumCols
+
+  def applyToColumn(colId: Int, f: Double => Double): Array[Double] = {
+    require(colId < numberOfCols)
+    val column: Array[Double] = data.extractVector(false, colId).getMatrix.getData
+    column.map(f)
+  }
 }
 
 object MLMatrix {

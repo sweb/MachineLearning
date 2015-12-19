@@ -6,7 +6,8 @@ package com.github.sweb.machinelearning
 object Preprocessor {
 
   def standardize(featureMatrix: MLMatrix): MLMatrix = {
-    val columns = (0 until featureMatrix.numberOfCols).map(featureMatrix.data.extractVector(false, _).getMatrix.getData).toList
+    val columnIds = 0 until featureMatrix.numberOfCols
+    val columns = columnIds.map(featureMatrix.data.extractVector(false, _).getMatrix.getData).toList
     val sizes = columns.map(_.size)
     val means = columns.map(col => col.sum / col.size)
     val standardDeviations = columns.zip(means)
