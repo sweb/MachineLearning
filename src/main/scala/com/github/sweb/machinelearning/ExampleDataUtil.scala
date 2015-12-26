@@ -22,8 +22,19 @@ object ExampleDataUtil extends App {
 
   val result = model.fittedParameters
 
+  val reducedFeatures = Preprocessor.standardize(MLMatrix(train.select(List(0, 1, 3, 4)).toFeatureMatrix), means, stds)._1.to2DArray
+  val reducedModel = LeastSquares(reducedFeatures, trainObservations, true)
+
   println("-" * 80)
   println(result.mkString(","))
+  println("-" * 80)
+  println(model.covarianceMatrix.data)
+  println("-" * 80)
+  println(model.variance)
+  println("-" * 80)
+  println(model.zScores.mkString(","))
+  println("-" * 80)
+  println(model.fStatistic(reducedModel))
 
 
 

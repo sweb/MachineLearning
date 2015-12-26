@@ -5,7 +5,6 @@ package com.github.sweb.machinelearning
   */
 case class LeastSquares(featureMatrix: Array[Array[Double]], observations: Array[Double], addIntercept: Boolean) {
   val processedFeatures = preprocessFeatures(featureMatrix)
-  //val X = LeastSquares.standardize(MLMatrix(processedFeatures))
   val X = MLMatrix(processedFeatures)
   val y = MLVector(observations)
 
@@ -44,11 +43,27 @@ case class LeastSquares(featureMatrix: Array[Array[Double]], observations: Array
   }
 
   def variance(): Double = {
-    residualSumOfSquares(fittedParameters) / (X.numberOfRows - X.numberOfCols - 1 - 1)
+    residualSumOfSquares(fittedParameters) / (X.numberOfRows - X.numberOfCols)
   }
 
   def covarianceMatrix(): MLMatrix = {
     (X.transpose * X).invert * variance
+  }
+
+  def zScores: Array[Double] = {
+    val tempMatrix = (X.transpose * X).invert
+    val range = 0 until tempMatrix.numberOfCols
+    val vj = range.map(i => tempMatrix.data.get(i,i))
+    val standardError = vj.map(v => Math.sqrt(variance * v))
+    fittedParameters.zip(standardError).map {
+      case (beta, stdError) => beta / stdError
+    }
+  }
+
+  def fStatistic(otherModel: LeastSquares): Double = {
+    val nominator = (otherModel.residualSumOfSquares(otherModel.fittedParameters) - residualSumOfSquares(fittedParameters)) / (X.numberOfCols - otherModel.X.numberOfCols)
+    val devisor = residualSumOfSquares(fittedParameters) / (X.numberOfRows - X.numberOfCols)
+    nominator / devisor
   }
 }
 
